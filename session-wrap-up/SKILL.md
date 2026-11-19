@@ -20,7 +20,7 @@ What you must not do:
 - Add, remove or rewrite comments
 - Create other documentation files
 - Apply spelling fixes before showing them to the user
-- Add Co-Authored-By or any other Claude signature to commits
+- Credit Claude in commits or add the AI statement against the repository settings (see step 2)
 - Force push
 
 Critical warnings go in notes.md, never in the code. Quick annotations in comments (row counts, open questions) and commented-out alternative code are normal. Do not flag them.
@@ -42,7 +42,26 @@ If it exists, run `git status`, `git diff --stat` and `git log -5`. If the folde
 
 notes.md is never pushed. Check that it is in .gitignore. If it was pushed before, remove it with `git rm --cached notes.md`, which keeps the local file.
 
-## 2. Review
+## 2. Settings
+Each repository has two settings about how Claude's role is made visible:
+- AI statement. Whether the README carries the AI statement section (step 5)
+- Co-author. Whether commits end with `Co-Authored-By: Claude <noreply@anthropic.com>`, which makes GitHub show Claude as co-author
+
+They are stored in the repository's local git config, which is never pushed.
+
+```
+git config --local wrapup.aistatement true
+git config --local wrapup.coauthor false
+```
+
+Read them at every wrap-up with `git config --get wrapup.aistatement` and `git config --get wrapup.coauthor`. If one is missing:
+- If the user already gave a general answer (in your memory, or in `git config --global --get wrapup.aistatement` and `wrapup.coauthor`), apply it, save it locally and say so in one line
+- Otherwise ask both questions together, and ask whether the answer is for this repository only or for all their projects
+- Save the answer with `git config --local`. If it is for all projects, also save it with `git config --global` and in your memory if you have one
+
+The user can change either setting at any time by asking.
+
+## 3. Review
 - Summarise the changes by intent, not file by file
 - Ask only about what you do not understand. Three questions at most
 - Find problems, but do not fix them. Critical ones go to Warnings and improvable ones to To learn. Critical examples:
@@ -53,7 +72,7 @@ notes.md is never pushed. Check that it is in .gitignore. If it was pushed befor
   - An object used where another one was clearly intended (for example, a copied block that kept the previous name)
   - Results that change with no change in the code
 
-## 3. notes.md
+## 4. notes.md
 It must be readable in 30 seconds. Always this shape and nothing else, with the headings in the user's language:
 
 ```
@@ -90,13 +109,13 @@ It must be readable in 30 seconds. Always this shape and nothing else, with the 
 - If a note is unclear, ask instead of interpreting it
 - Write in the language of the user's notes
 
-## 4. README.md
+## 5. README.md
 Brief, in the language the README already uses. Touch only what changed.
 - If a new script appears, add a row to the Pipeline table with its purpose in one sentence
 - If a script is removed or renamed, update its row
 - Mention the requirements files in one line
 - Do not invent scientific content. If something is missing, ask
-- Always include the AI statement section at the end, with the text below. If it is already there, leave it as it is
+- If the AI statement setting is on, keep the AI statement section at the end, with the text below. If the setting is off, do not add it
 
 If there is no README, create a minimal one with these sections:
 - Title
@@ -104,7 +123,7 @@ If there is no README, create a minimal one with these sections:
 - Repository Structure, with the Pipeline table (script and purpose)
 - Data
 - License
-- AI statement
+- AI statement, if the setting is on
 
 Authors, Abstract, Citation, Funding and Acknowledgements only if the user provides the text.
 
@@ -113,10 +132,10 @@ AI statement text.
 ```
 ## AI statement
 
-Claude (Anthropic) is used for editing and organisation tasks in this repository, not to generate code automatically. It reviews the changes, identifies possible errors and records them, with suggestions, in the author's private notes. It also updates this README and the requirements files, corrects spelling in code comments and prepares commits that the author approves before pushing.
+Claude (Anthropic) is used for editing and organisation tasks in this repository through the [session-wrap-up](https://github.com/Wences91/session-wrap-up) [skill](https://support.claude.com/en/articles/12512176-what-are-skills), not to generate code automatically. It reviews the changes, identifies possible errors and records them, with suggestions, in the author's private notes. It also updates this README and the requirements files, corrects spelling in code comments and prepares commits that the author approves before pushing.
 ```
 
-## 5. Requirements
+## 6. Requirements
 Record only the packages the code really uses, with the version installed on the user's machine.
 
 Python in requirements.txt:
@@ -133,14 +152,15 @@ R in renv.lock:
 
 Update them at every wrap-up if there are new packages or versions have changed.
 
-## 6. Commit and push
+## 7. Commit and push
 - Show the list of files going into the commit
 - Propose a short, descriptive message in the user's language
+- Add the Co-Authored-By line only if the co-author setting is on. Otherwise add no Claude signature at all
 - Wait for explicit confirmation before committing and pushing
 - Run `git fetch` before pushing. If the remote has changes that are not local, warn the user and stop
 - If authentication fails, tell the user to run `gh auth login` on their machine
 
-## 7. Wrap-up
+## 8. Wrap-up
 End with three lines at most:
 - What was pushed
 - What is still pending

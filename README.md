@@ -8,9 +8,10 @@ It never writes or changes your code. In code files it only fixes spelling in co
 
 - Summarises the changes of the session and asks only about what it does not understand
 - Keeps a private `notes.md` (never pushed) with pending tasks, critical warnings, learning tips from your own code and a short log of the last session
-- Updates `README.md` briefly and adds an AI statement that explains its role
+- Updates `README.md` briefly
 - Records the packages your code uses, with versions, in `requirements.txt` (Python) and `renv.lock` (R)
-- Prepares the commit, waits for your approval and pushes. No force push and no Claude signature in commits
+- Asks once, for one repository or for all your projects, whether to add an AI statement to the README and whether to credit Claude as co-author in commits. The answer is kept in the local git config
+- Prepares the commit, waits for your approval and pushes. Never force pushes
 - Warns about cloud sync conflicts (OneDrive, Dropbox, iCloud, Google Drive) and checks the integrity of `.git`
 
 ## Installation
