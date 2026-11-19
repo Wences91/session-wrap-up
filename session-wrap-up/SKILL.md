@@ -127,7 +127,10 @@ If there is no README, create a minimal one with these sections:
 
 Authors, Abstract, Citation, Funding and Acknowledgements only if the user provides the text.
 
-AI statement text.
+### AI statement text
+Write it exactly as below, keeping both links:
+- "session-wrap-up" links to the skill's repository, so readers can use the skill and check what it does
+- "skill" links to Claude's documentation, which explains what a skill is
 
 ```
 ## AI statement
